@@ -14,6 +14,8 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBOutlet weak var tableView: UITableView!
     
+    static var tvPoint: UITableView = UITableView()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -21,8 +23,10 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.delegate = self
         tableView.refreshControl = UIRefreshControl()
         tableView.refreshControl?.addTarget(self, action: #selector(loadTweets), for: .valueChanged)
-        //tableView.rowHeight = UITableViewAutomaticDimension
-        //tableView.estimatedRowHeight = 100
+        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.estimatedRowHeight = 100
+        
+        TimelineViewController.tvPoint = tableView
         
         APIManager.shared.getHomeTimeLine { (tweets, error) in
             if let tweets = tweets {
