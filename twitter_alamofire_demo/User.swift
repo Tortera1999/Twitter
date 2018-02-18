@@ -12,12 +12,26 @@ class User {
     
     var name: String
     var screenName: String
+    var profilePic: URL?
+    var backgroundUrl: URL?
+    var tweetsTotal: Int
+    var followingTotal: Int
+    var followersTotal: Int
+    var descriptionOfUser: String
     
     static var current: User?
     
     init(dictionary: [String: Any]) {
+        print("MY Dict")
+        print(dictionary)
         name = dictionary["name"] as! String
         screenName = dictionary["screen_name"] as! String
-
+        profilePic = URL(string: ((dictionary["profile_image_url_https"] as? String))!)
+        //backgroundUrl = URL(string: ((dictionary["profile_banner_url"] as? String))!)
+        followingTotal = (dictionary["friends_count"] as? Int)!
+        followersTotal = (dictionary["followers_count"] as? Int)!
+        tweetsTotal = (dictionary["statuses_count"] as? Int)!
+        
+        descriptionOfUser = dictionary["description"] as! String
     }
 }

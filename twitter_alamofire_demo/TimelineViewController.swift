@@ -8,13 +8,17 @@
 
 import UIKit
 
-class TimelineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class TimelineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate {
     
     var tweets: [Tweet] = []
     
     @IBOutlet weak var tableView: UITableView!
     
     static var tvPoint: UITableView = UITableView()
+    
+    func did(post: Tweet) {
+        print ("YES!")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -36,6 +40,11 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
                 print("Error getting home timeline: " + error.localizedDescription)
             }
         }
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        tableView.reloadData();
+        TimelineViewController.tvPoint.reloadData();
     }
     
     @objc func loadTweets() {
@@ -76,6 +85,17 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
     
     @IBAction func didTapLogout(_ sender: Any) {
         APIManager.shared.logout()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if let cell = sender as? TweetCell {
+            let vc = segue.destination as! TweetDetailViewController
+            let indexPath = tableView.indexPath(for: cell)!
+            // Pass the selected object to the new view controller.
+            let tweet = tweets[indexPath.row]
+            vc.tweet = tweet
+            
+        }
     }
     
     

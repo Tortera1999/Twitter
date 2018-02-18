@@ -28,12 +28,12 @@ class TweetCell: UITableViewCell {
         didSet {
             tweetTextLabel.text = tweet.text
             nameLabel.text = tweet.user.name
-            screenLabel.text = tweet.user.screenName
+            screenLabel.text = "@\(tweet.user.screenName)"
             dateLabel.text = tweet.createdAtString
-            //replyCountLabel.text = tweet.
+            //replyCountLabel.text = "\(String(describing: tweet.replyCount))"
             
             profileView.af_setImage(withURL: URL(string: tweet.profileUrl)!)
-            replyCountLabel.text = "\(tweet.replyCount ?? 0)"
+            //replyCountLabel.text = "\(tweet.replyCount ?? 0)"
             
             if tweet.retweeted == true {
                 retweetButton.setImage(#imageLiteral(resourceName: "retweet-icon-green"), for: .normal)
