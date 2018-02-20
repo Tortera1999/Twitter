@@ -31,7 +31,7 @@ class TweetDetailViewController: UIViewController {
         userNameLabel.text = tweet.user.name
         userIdLabel.text = tweet.user.screenName
         tweetDetail.text = tweet.text
-        dateLabel.text = tweet.createdAtString
+        dateLabel.text = "\(tweet.createdAtString) •\(tweet.timeAgo)"
         
         if tweet.retweeted == true {
             retweetButton.setImage(#imageLiteral(resourceName: "retweet-icon-green"), for: .normal)

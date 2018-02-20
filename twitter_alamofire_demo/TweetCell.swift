@@ -35,7 +35,7 @@ class TweetCell: UITableViewCell {
             tweetTextLabel.text = tweet.text
             nameLabel.text = tweet.user.name
             screenLabel.text = "@\(tweet.user.screenName)"
-            dateLabel.text = tweet.createdAtString
+            dateLabel.text = "•\(tweet.timeAgo)"
             //replyCountLabel.text = "\(String(describing: tweet.replyCount))"
             
             profileView.af_setImage(withURL: URL(string: tweet.profileUrl)!)

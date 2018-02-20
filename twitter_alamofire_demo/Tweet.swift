@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import  DateToolsSwift
 
 class Tweet {
     
@@ -21,6 +22,7 @@ class Tweet {
     var createdAtString: String // Display date
     var profileUrl: String
     var replyCount: Int?
+    var timeAgo: String
     
     var retweetedByUser: User?
     
@@ -61,6 +63,9 @@ class Tweet {
         formatter.timeStyle = .none
         // Convert Date to String
         createdAtString = formatter.string(from: date)
+        
+        let ta = 2.seconds.earlier(than: date)
+        timeAgo = String(describing: ta.shortTimeAgoSinceNow)
     
     }
     
