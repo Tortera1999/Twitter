@@ -48,6 +48,12 @@ class TweetDetailViewController: UIViewController {
         retweetCountLabel.text = "\(String(describing: tweet.retweetCount))"
         favCountLabel.text = "\(String(describing: tweet.favoriteCount))"
         
+        profilePic.layer.borderWidth = 1.0
+        profilePic.layer.masksToBounds = false
+        profilePic.layer.borderColor = UIColor.white.cgColor
+        profilePic.layer.cornerRadius = profilePic.frame.height/2
+        profilePic.clipsToBounds = true
+        
         // Do any additional setup after loading the view.
     }
 

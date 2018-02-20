@@ -31,6 +31,13 @@ class ComposeViewController: UIViewController, UITextViewDelegate {
         newTweet.translatesAutoresizingMaskIntoConstraints = true
         newTweet.sizeToFit()
         newTweet.isScrollEnabled = false
+        newTweet.textColor = UIColor.lightGray
+        
+        profilePhoto.layer.borderWidth = 1.0
+        profilePhoto.layer.masksToBounds = false
+        profilePhoto.layer.borderColor = UIColor.white.cgColor
+        profilePhoto.layer.cornerRadius = profilePhoto.frame.height/2
+        profilePhoto.clipsToBounds = true
         
         APIManager.shared.getCurrentAccount(completion: { (user, error) in
             if let error = error {
@@ -62,7 +69,7 @@ class ComposeViewController: UIViewController, UITextViewDelegate {
             } else if let tweet = tweet {
                 self.delegate?.did(post: tweet)
                 print("Compose Tweet Success!")
-                TimelineViewController.tvPoint.reloadData();
+                //TimelineViewController.tvPoint.reloadData();
                 self.dismiss(animated: true, completion: nil)
             }
         }
@@ -77,7 +84,12 @@ class ComposeViewController: UIViewController, UITextViewDelegate {
     @IBAction func back(_ sender: Any) {
         self.dismiss(animated: true, completion: nil)
     }
-    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.textColor == UIColor.lightGray {
+            textView.text = nil
+            textView.textColor = UIColor.black
+        }
+    }
 
     /*
     // MARK: - Navigation

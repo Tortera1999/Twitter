@@ -22,12 +22,15 @@ class User {
     static var current: User?
     
     init(dictionary: [String: Any]) {
-        print("MY Dict")
-        print(dictionary)
         name = dictionary["name"] as! String
         screenName = dictionary["screen_name"] as! String
         profilePic = URL(string: ((dictionary["profile_image_url_https"] as? String))!)
-        //backgroundUrl = URL(string: ((dictionary["profile_banner_url"] as? String))!)
+        if let url = dictionary["profile_banner_url"] as? String{
+            backgroundUrl = URL(string: url)
+            print("My B Url")
+            print(backgroundUrl!);
+        }
+        
         followingTotal = (dictionary["friends_count"] as? Int)!
         followersTotal = (dictionary["followers_count"] as? Int)!
         tweetsTotal = (dictionary["statuses_count"] as? Int)!

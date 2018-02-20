@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TimelineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate {
+class TimelineViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, ComposeViewControllerDelegate, TweetCellDelegate {
     
     var tweets: [Tweet] = []
     
@@ -43,8 +43,16 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        tableView.reloadData();
-        TimelineViewController.tvPoint.reloadData();
+        APIManager.shared.getHomeTimeLine { (tweets, error) in
+            if let tweets = tweets {
+                self.tweets = tweets
+                self.tableView.refreshControl?.endRefreshing()
+                self.tableView.reloadData()
+            } else if let error = error {
+                self.tableView.refreshControl?.endRefreshing()
+                print("Error getting home timeline: " + error.localizedDescription)
+            }
+        }
     }
     
     @objc func loadTweets() {
@@ -69,12 +77,20 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
         let cell = tableView.dequeueReusableCell(withIdentifier: "TweetCell", for: indexPath) as! TweetCell
         
         cell.tweet = tweets[indexPath.row]
+        cell.delegate = self
         
         return cell
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+    }
+    
+    func tweetCell(_ tweetCell: TweetCell, didTap user: User) {
+        // TODO: Perform segue to profile view controller
+        
+        performSegue(withIdentifier: "profileSegue", sender: tweetCell)
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -88,7 +104,17 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if let cell = sender as? TweetCell {
+        
+        if (segue.identifier == "profileSegue") {
+            if let cell = sender as? TweetCell {
+                let vc = segue.destination as! ProfileViewController
+                let indexPath = tableView.indexPath(for: cell)!
+                // Pass the selected object to the new view controller.
+                let tweet = tweets[indexPath.row].user
+                vc.user = tweet;
+                
+            }
+        } else if let cell = sender as? TweetCell {
             let vc = segue.destination as! TweetDetailViewController
             let indexPath = tableView.indexPath(for: cell)!
             // Pass the selected object to the new view controller.
@@ -97,6 +123,8 @@ class TimelineViewController: UIViewController, UITableViewDelegate, UITableView
             
         }
     }
+    
+ 
     
     
     /*

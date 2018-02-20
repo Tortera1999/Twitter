@@ -19,28 +19,49 @@ class ProfileViewController: UIViewController {
     @IBOutlet weak var totalFollowers: UILabel!
     @IBOutlet weak var descriptionOftheUser: UILabel!
     
+    var user: User?
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        APIManager.shared.getCurrentAccount(completion: { (user, error) in
-            if let error = error {
-                print("HUH? ERROR ----------------")
-                print (error)
-            } else if let user = user {
-                //print("Welcome \(user.name)")
-                
-                //self.backdrop.af_setImage(withURL: (user.backgroundUrl)!)
-                self.profilePic.af_setImage(withURL: user.profilePic!)
-                self.userName.text = user.name;
-                self.userId.text = "@\(user.screenName)";
-                self.totalTweets.text = "\(user.tweetsTotal)"
-                self.totalFollowing.text = "\(user.followingTotal)"
-                self.totalFollowers.text = "\(user.followersTotal)"
-                self.descriptionOftheUser.text = user.descriptionOfUser;
-                
-            }
-        })
+        profilePic.layer.borderWidth = 1.0
+        profilePic.layer.masksToBounds = false
+        profilePic.layer.borderColor = UIColor.white.cgColor
+        profilePic.layer.cornerRadius = profilePic.frame.height/2
+        profilePic.clipsToBounds = true
+        if let user = user {
+            print("The user")
+            self.profilePic.af_setImage(withURL: user.profilePic!)
+            self.backdrop.af_setImage(withURL: (user.backgroundUrl)!)
+            self.userName.text = user.name;
+            self.userId.text = "@\(user.screenName)";
+            self.totalTweets.text = "\(user.tweetsTotal)"
+            self.totalFollowing.text = "\(user.followingTotal)"
+            self.totalFollowers.text = "\(user.followersTotal)"
+            self.descriptionOftheUser.text = user.descriptionOfUser;
+            
+        } else {
+            APIManager.shared.getCurrentAccount(completion: { (user, error) in
+                if let error = error {
+                    print("HUH? ERROR ----------------")
+                    print (error)
+                } else if let user = user {
+                    //print("Welcome \(user.name)")
+                    
+                    self.backdrop.af_setImage(withURL: (user.backgroundUrl)!)
+                    self.profilePic.af_setImage(withURL: user.profilePic!)
+                    self.userName.text = user.name;
+                    self.userId.text = "@\(user.screenName)";
+                    self.totalTweets.text = "\(user.tweetsTotal)"
+                    self.totalFollowing.text = "\(user.followingTotal)"
+                    self.totalFollowers.text = "\(user.followersTotal)"
+                    self.descriptionOftheUser.text = user.descriptionOfUser;
+                    
+                }
+            })
 
+        }
+        
         // Do any additional setup after loading the view.
     }
 
